@@ -1,0 +1,46 @@
+services:
+  
+  api:
+    build:
+      context: src
+      dockerfile: Dockerfile
+    container_name: api
+    # restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - hello
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_USER=admin
+      - DB_PASSWORD=password
+      - DB_NAME=mydatabase
+      - DB_PORT=3306
+      - PORT=3000
+
+  db:
+    image: mysql:9.0.1-oraclelinux9
+    container_name: mysql9
+    # restart: always
+    volumes:
+      - ./data/:/docker-entrypoint-initdb.d/
+    networks:
+      - hello
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-ppassword", "-e", "select * from mydatabase.users"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      
+networks:
+  hello:
+    name: hello
