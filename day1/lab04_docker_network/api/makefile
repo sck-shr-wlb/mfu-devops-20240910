@@ -29,6 +29,9 @@ list_containers:
 install_packages:
 	cd src && npm install
 
+build_api:
+	cd src &&  docker build -t api:0.0.1 .
+
 start_api_with_network:
 	docker container run --rm -d --name api \
 	-e DB_HOST=mysql9 \
