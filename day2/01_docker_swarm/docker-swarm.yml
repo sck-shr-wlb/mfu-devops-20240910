@@ -1,0 +1,12 @@
+# docker swarm init
+# docker stack deploy --compose-file docker-swarm.yml stackdemo
+# docker service ls
+# docker service scale stackdemo_json_server=3
+# docker stack rm stackdemo
+# docker swarm leave --force
+
+services:
+  my_nginx:
+    image: nginx:1.25.4
+    ports:
+      - "8080:80"
