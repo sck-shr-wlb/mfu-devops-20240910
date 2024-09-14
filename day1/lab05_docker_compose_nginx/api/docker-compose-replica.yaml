@@ -1,0 +1,37 @@
+services:
+  db:
+    image: mysql:9.0.1-oraclelinux9
+    restart: always
+    volumes:
+      - ./data/:/docker-entrypoint-initdb.d/
+    networks:
+      - hello
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: vip
+    scale: 2
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+
+  api:
+    image: api:0.0.1
+    container_name: api
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - hello
+    environment:
+      - DB_HOST=db
+      - DB_USER=admin
+      - DB_PASSWORD=password
+      - DB_NAME=mydatabase
+      - DB_PORT=3306
+      - PORT=3000
+
+networks:
+  hello:

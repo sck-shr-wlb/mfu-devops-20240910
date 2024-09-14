@@ -1,0 +1,55 @@
+services:
+  
+  hello-service:
+    image: api:0.0.1
+    networks:
+      - hello
+    depends_on:
+      db:
+        condition: service_healthy
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: vip
+    environment:
+      - DB_HOST=db
+      - DB_USER=admin
+      - DB_PASSWORD=password
+      - DB_NAME=mydatabase
+      - DB_PORT=3306
+      - PORT=3000
+
+  db:
+    image: mysql:9.0.1-oraclelinux9
+    volumes:
+      - ./data/:/docker-entrypoint-initdb.d/
+    networks:
+      - hello
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-ppassword", "-e", "select * from mydatabase.users"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+
+  nginx:
+    image: mynginx:0.1.0
+    container_name: nginx
+    build:
+      context: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - hello
+    restart: always
+      
+networks:
+  hello:
+    name: hello
