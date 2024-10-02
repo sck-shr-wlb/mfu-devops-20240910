@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  tomcat:
+    connection-timeout: 2s
+    keep-alive-timeout: 15s
+    threads:
+      max: 50
+      min-spare: 5
+
+spring:
+  application:
+    name: greeting-service
+
+management:
+  endpoints: # exposing the health Actuator endpoint
+    web:
+    exposure:
+      include: health
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
