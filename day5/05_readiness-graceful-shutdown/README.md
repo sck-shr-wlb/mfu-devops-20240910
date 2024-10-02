@@ -225,7 +225,7 @@
    - Change directory to `greeting-service`
 
    ```sh
-   ./gradlew bootBuildImage
+   docker build -t greeting-service:0.0.2 .
    docker image ls
    ```
 
@@ -358,7 +358,7 @@
    - Change directory to `greeting-service`
 
    ```sh
-   ./gradlew bootBuildImage
+   docker build -t greeting-service:0.0.3 .
    docker image ls
    ```
 
@@ -534,7 +534,7 @@
    - Change directory to `greeting-service`
 
    ```sh
-   ./gradlew bootBuildImage
+   docker build -t greeting-service:0.0.4 .
    docker image ls
    ```
 
