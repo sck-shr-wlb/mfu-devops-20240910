@@ -1,0 +1,20 @@
+server:
+  ingress:
+    enabled: true
+    hosts:
+      - prometheus.example.com
+extraScrapeConfigs: |
+  - job_name: 'nodejs-application'
+    metrics_path: '/metrics'
+    scrape_interval: 3s # This can be adjusted based on our needs
+    static_configs:
+      - targets: ['point-service-svc.default.svc.cluster.local:8001']
+        labels:
+          application: 'Point service'
+  - job_name: 'mysql-exporter'
+    metrics_path: '/metrics'
+    scrape_interval: 3s # This can be adjusted based on our needs
+    static_configs:
+      - targets: ['host.docker.internal:9104']
+        labels:
+          application: 'mysql'
