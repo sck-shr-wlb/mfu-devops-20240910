@@ -8,7 +8,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String getGreeting() throws InterruptedException  {
-        Thread.sleep(1000);
+        Thread.sleep(3000);
         return "Hello, Health Check!";
     }
 }
